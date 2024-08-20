@@ -44,7 +44,20 @@ html, body {
 		  },
           id: 'editor',
           displayMode: 'web',
-          projectId: 245552
+          projectId: 245552,
+          mergeTags: {
+       	    first_name: {
+       	      name: "First Name",
+       	      value: "{{first_name}}",
+       	      sample: "John"
+       	    },
+       	    last_name: {
+       	      name: "Last Name",
+       	      value: "{{last_name}}",
+       	      sample: "Doe-last-name"
+       	    }
+       	  }         
+          
         });
         document.getElementById('copy_button').addEventListener('click', () => {
             unlayer.exportHtml(data => {            	
