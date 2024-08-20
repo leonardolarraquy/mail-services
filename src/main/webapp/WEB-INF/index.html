@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<script src="https://editor.unlayer.com/embed.js"></script>
+<style>
+html, body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+
+#editor {
+	width: 100%;
+	height: 100%;
+}
+</style>
+</head>
+<body>
+	<div class="toolbar" style="background-color: #e8e8e8">
+		<button id="copy_button" title="Guardar nuevos">Save as NEW</button>
+		<button id="save_button" title="Guardar en archivo">Save</button>
+		<input type="file" id="file_selector"
+			title="Especifique el archivo desde el que desea cargar el diseño.">
+		<button id="load_design"
+			title="Cargar diseño desde el archivo seleccionado">Subir
+			diseño</button>
+
+	</div>
+	<div id="editor"></div>
+	<script>
+    (() => {
+        unlayer.init({
+      	  appearance: {
+      		    panels: {
+      		      tools: {
+      		        dock: 'left'
+      		      }
+      		    }
+      	  },
+   		  appearance: {
+   			    theme: 'modern_dark'
+		  },
+          id: 'editor',
+          displayMode: 'web',
+          projectId: 245552
+        });
+        document.getElementById('copy_button').addEventListener('click', () => {
+            unlayer.exportHtml(data => {            	
+            	alert (data.html);
+            	alert (data.design);
+
+            	console.log(data.html);
+            	console.log(data.design);
+            	
+                fetch('https://7b29-190-137-43-94.ngrok-free.app/mail-services/TemplateServlet', {
+                    method: 'POST', // Método de la solicitud (GET, POST, etc.)
+                    headers: {
+                        'Content-Type': 'application/json' // Tipo de contenido que estás enviando
+                    },
+                    body: JSON.stringify(data.html) // Convertir los datos a una cadena JSON
+                     
+                })
+                .then(response => response.text())
+                .then(data => {
+                	alert('todo ok ');
+                    console.log('Éxito:', data); // Manejar la respuesta exitosa
+                })
+                .catch((error) => {
+                	alert('quilombo');
+                    console.error('Error:', error); // Manejar cualquier error
+                });
+                
+            });
+        });
+
+        document.getElementById('save_button').addEventListener('click', () => {
+           unlayer.saveDesign(function (design) {
+        	   console.log(JSON.stringify(design, undefined, 2));
+        	   
+               const blob = new Blob([JSON.stringify(design, undefined, 2)], {type: "text/plain;charset=utf-8"});
+               
+        	   alert(blob);
+
+               saveAs(blob, "design.json");
+            });
+        });
+
+        const fileSelector = document.getElementById('file_selector');
+        document.getElementById('load_design').addEventListener('click', () => {
+            const files = fileSelector.files;
+            if (!files.length) {
+                alert('Выберите файл с дизаном в формате JSON');
+                return;
+            }
+            const reader = new FileReader();
+           reader.readAsText(files[0],'UTF-8');
+
+           // here we tell the reader what to do when it's done reading...
+           reader.onload = readerEvent => {
+              const content = readerEvent.target.result; // this is the content!
+              unlayer.loadDesign(JSON.parse(content));
+           }
+        })
+    })();
+</script>
+</body>
+</html>

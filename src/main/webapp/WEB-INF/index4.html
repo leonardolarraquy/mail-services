@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://editor.unlayer.com/embed.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #editor {
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+</head>
+<body>
+<div class="toolbar" style="background-color: #e8e8e8">
+    <button id="copy_button" title="Copiar al portapapeles">COPIAR</button>
+    <button id="save_button" title="Guardar en archivo">Save</button>
+    <input type="file" id="file_selector" title="Especifique el archivo desde el que desea cargar el diseño.">
+    <button id="load_design" title="Cargar diseño desde el archivo seleccionado">Subir diseño</button>
+
+</div>
+<div id="editor">
+
+</div>
+<script>
+       unlayer.init({
+           id: 'editor',
+           displayMode: 'web',
+           projectId: 245552
+       });
+       unlayer.saveDesign(function(design) {
+       	  console.log('design', design);
+       	  alert(design);
+       });
+</script>
+</body>
+</html>
